@@ -153,7 +153,7 @@ export function ConvertImage(file:Blob, quality:number):Promise<ArrayBuffer> {
                 context.drawImage(image, 0, 0, imageWidth, imageHeight,-imageWidth/2,-imageHeight/2,imageWidth,imageHeight);
 				context.restore();
 
-                data = canvas.toDataURL('image/jpeg',quality);
+                data = canvas.toDataURL('image/webp',quality);
 
                 var arrayBuffer = base64ToArrayBuffer(data);
                 resolve(arrayBuffer)
