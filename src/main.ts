@@ -106,44 +106,46 @@ export default class PastePngToJpegPlugin extends Plugin {
 			await this.app.vault.modifyBinary(file, arrayBuffer);
 		}
 
-		// get origin file link before renaming
-		const linkText = this.makeLinkText(file, sourcePath);
+		setTimeout(async () => {
+			// get origin file link before renaming
+			const linkText = this.makeLinkText(file, sourcePath);
 
-		// file system operation
-		newPath = path.join(newPath, newName);
-		try {
-			await this.app.vault.rename(file, newPath);
-		} catch (err) {
-			new Notice(`Failed to rename ${newName}: ${err}`);
-			throw err;
-		}
+			// file system operation
+			newPath = path.join(newPath, newName);
+			try {
+				await this.app.vault.rename(file, newPath);
+			} catch (err) {
+				new Notice(`Failed to rename ${newName}: ${err}`);
+				throw err;
+			}
 
-		const newLinkText = this.makeLinkText(file, sourcePath);
-		debugLog("replace text", linkText, newLinkText);
+			const newLinkText = this.makeLinkText(file, sourcePath);
+			debugLog("replace text", linkText, newLinkText);
 
-		// in case fileManager.renameFile may not update the internal link in the active file,
-		// we manually replace by manipulating the editor
-		const editor = this.getActiveEditor(sourcePath);
-		if (!editor) {
-			new Notice(`Failed to rename ${newName}: no active editor`);
-			return;
-		}
+			// in case fileManager.renameFile may not update the internal link in the active file,
+			// we manually replace by manipulating the editor
+			const editor = this.getActiveEditor(sourcePath);
+			if (!editor) {
+				new Notice(`Failed to rename ${newName}: no active editor`);
+				return;
+			}
 
-		const cursor = editor.getCursor();
-		const line = editor.getLine(cursor.line);
-		debugLog("current line", line);
-		// console.log('editor context', cursor, )
-		editor.transaction({
-			changes: [
-				{
-					from: { ...cursor, ch: 0 },
-					to: { ...cursor, ch: line.length },
-					text: line.replace(linkText, newLinkText),
-				},
-			],
-		});
+			const cursor = editor.getCursor();
+			const line = editor.getLine(cursor.line);
+			debugLog("current line", line);
+			// console.log('editor context', cursor, )
+			editor.transaction({
+				changes: [
+					{
+						from: { ...cursor, ch: 0 },
+						to: { ...cursor, ch: line.length },
+						text: line.replace(linkText, newLinkText),
+					},
+				],
+			});
 
-		new Notice(`Renamed ${originName} to ${newName}`);
+			new Notice(`Renamed ${originName} to ${newName}`);
+		}, 500);
 	}
 
 	makeLinkText(file: TFile, sourcePath: string, subpath?: string): string {
