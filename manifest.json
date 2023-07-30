@@ -1,7 +1,7 @@
 {
 	"id": "obsidian-paste-png-to-webp",
 	"name": "Paste image Png to Webp",
-	"version": "1.0.0",
+	"version": "1.2.3",
 	"minAppVersion": "0.14.0",
 	"description": "Screenshot png to webp and compress and rename",
 	"author": "eightHundreds",

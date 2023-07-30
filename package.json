@@ -1,6 +1,6 @@
 {
 	"name": "obsidian-paste-png-to-jpeg",
-	"version": "1.2.2",
+	"version": "1.2.3",
 	"main": "main.js",
 	"scripts": {
 		"dev": "obsidian-plugin dev src/main.ts",
