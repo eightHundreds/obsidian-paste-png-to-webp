@@ -67,6 +67,10 @@ export default class PastePngToJpegPlugin extends Plugin {
 
 	async renameFile(file: TFile) {
 		const activeFile = this.getActiveFile();
+		const matter = this.app.metadataCache.getFileCache(activeFile).frontmatter;
+		if(matter.disable2webp){
+			return;
+		}
 
 		if (!activeFile) {
 			new Notice("Error: No active file found.");
